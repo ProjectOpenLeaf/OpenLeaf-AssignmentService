@@ -1,14 +1,8 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.business.AssignTherapist;
-import org.example.business.CheckAuthorization;
-import org.example.business.GetTherapistPatients;
-import org.example.business.UnassignTherapist;
-import org.example.business.dto.AssignRequest;
-import org.example.business.dto.AssignResponse;
-import org.example.business.dto.AuthorizationResponse;
-import org.example.business.dto.PatientInfo;
+import org.example.business.*;
+import org.example.business.dto.*;
 import org.example.domain.Assignment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,5 +81,23 @@ public class AssignmentController {
 
         unassignTherapist.unassign(assignmentId);
         return ResponseEntity.ok("Therapist unassigned successfully");
+    }
+
+    private final GetPatientTherapist getPatientTherapist;
+
+    @GetMapping("/patient/{patientId}/therapist")
+    public ResponseEntity<TherapistInfo> getPatientTherapist(
+            @PathVariable String patientId) {
+
+        Assignment assignment = getPatientTherapist.getTherapist(patientId);
+
+        TherapistInfo therapist = TherapistInfo.builder()
+                .assignmentId(assignment.getId())
+                .therapistKeycloakId(assignment.getTherapistKeycloakId())
+                .assignedAt(assignment.getAssignedAt())
+                .notes(assignment.getNotes())
+                .build();
+
+        return ResponseEntity.ok(therapist);
     }
 }

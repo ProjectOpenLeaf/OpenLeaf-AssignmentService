@@ -18,4 +18,6 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity, Lo
 
     boolean existsByPatientKeycloakIdAndTherapistKeycloakIdAndActiveTrue(
             String patientKeycloakId, String therapistKeycloakId);
+
+
 }
